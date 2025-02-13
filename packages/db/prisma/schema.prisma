@@ -1,0 +1,94 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User{
+  id          String        @id @default(uuid())
+  firstName   String        
+  lastName    String
+  profilePitcture  String?
+  oImages     OutputImage[]
+}
+
+
+model Model{
+  id          String        @id @default(uuid())
+  name        String    
+  type        ModelType
+  age         Int
+  ethinicity  Ethinicity
+  eyeColor    EyeColor
+  Bald        Boolean
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @default(now())
+  tImages     TrainingImages[]
+
+}
+
+model TrainingImages{
+  id          String        @id @default(uuid())
+  imageUrl    String   
+  modelId     String
+  model       Model        @relation(fields: [modelId], references: [id])
+}
+
+model OutputImage{
+  id          String        @id @default(uuid())
+  imageUrl    String        
+  modelId     String
+  userId      String        
+  user        User          @relation(fields: [userId], references: [id])
+}
+
+model Packs{
+  id          String        @id @default(uuid())
+  name        String
+  packPrompt  PackPrompt[]
+}
+
+
+model PackPrompt{
+  id           String        @id @default(uuid())
+  prompt       String
+  packId       String
+  pack         Packs        @relation(fields: [packId], references: [id])
+}
+
+
+
+enum ModelType{
+  Man
+  Women 
+  Others
+}
+
+enum   Ethinicity{
+  White
+  Black
+  AsianAmerican
+  EastAsian
+  SouthEastAsian
+  SouthAsian
+  MiddleEastern
+  Pacific
+  Hispanic
+}
+
+enum    EyeColor{
+  Blue
+  Brown
+  Black
+  Hazel
+  Gray
+}
