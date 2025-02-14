@@ -2,22 +2,21 @@ import {string, z} from 'zod';
 
 export const TrainModel = z.object({
     name: z.string(),
-    type: z.enum(['Man', 'Women', 'Other']),
+    type: z.enum(['Man', 'Women', 'Others']),
     age: z.number(),
     ethinicity: z.enum([
         'White',
-        'Black', 
-        'Brown', 
-        'Asian American', 
-        'East Asian', 
-        'South East Asian', 
-        'Middle Eastern', 
+        'Black',  
+        'AsianAmerican', 
+        'EastAsian', 
+        'SouthEastAsian', 
+        'MiddleEastern', 
         'Pacific', 
         'Hispanic'
     ]),
     eyecolor: z.enum(['Brown', 'Black', 'Hazel', 'Blue', 'Gray']),
     bald: z.boolean(),
-    images: z.array(z.string()),
+    zipUrl: z.string(),
 })
 
 export const GenerateImage = z.object({

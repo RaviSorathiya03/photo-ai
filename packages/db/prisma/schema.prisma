@@ -19,6 +19,7 @@ model User{
   lastName    String
   profilePitcture  String?
   oImages     OutputImage[]
+  model       Model[]
 }
 
 
@@ -32,23 +33,28 @@ model Model{
   Bald        Boolean
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @default(now())
-  tImages     TrainingImages[]
+  userId      String
+  triggerWord String?
+  tensorPath  String?
+  status      Status       @default(Pending)
+  FalAiRequestId   String?
+  user        User          @relation(fields: [userId], references: [id])
+  zipUrl      String?
+  @@index([FalAiRequestId])
 
 }
 
-model TrainingImages{
-  id          String        @id @default(uuid())
-  imageUrl    String   
-  modelId     String
-  model       Model        @relation(fields: [modelId], references: [id])
-}
 
 model OutputImage{
   id          String        @id @default(uuid())
   imageUrl    String        
   modelId     String
-  userId      String        
+  prompt      String
+  status      Status        @default(Pending)
+  userId      String      
+  falAiRequestId  String?  
   user        User          @relation(fields: [userId], references: [id])
+  @@index([falAiRequestId])
 }
 
 model Packs{
@@ -76,11 +82,11 @@ enum ModelType{
 enum   Ethinicity{
   White
   Black
-  AsianAmerican
-  EastAsian
-  SouthEastAsian
-  SouthAsian
-  MiddleEastern
+  AsianAmerican  @map("Asian American")
+  EastAsian      @map("East Asian")
+  SouthEastAsian @map("South East Asian")
+  SouthAsian     @map("South Asian")
+  MiddleEastern  @map("Middel Eastern")
   Pacific
   Hispanic
 }
@@ -91,4 +97,10 @@ enum    EyeColor{
   Black
   Hazel
   Gray
+}
+
+enum Status{
+  Pending 
+  Generated
+  Failed
 }
